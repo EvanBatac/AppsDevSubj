@@ -1,5 +1,4 @@
 ﻿
-
 using System;
 
 namespace ParkingSystem
@@ -22,6 +21,7 @@ namespace ParkingSystem
         public void Run()
         {
             int option;
+            Console.WriteLine("OVERNIGHT PARKING IS NOT ALLOWED \n");
             Console.WriteLine("Please select your vehicle type below:");
             Console.WriteLine("1. Motor Bike");
             Console.WriteLine("2. SUV");
@@ -68,20 +68,23 @@ namespace ParkingSystem
             TimeIn = DateTime.Now;
             Console.WriteLine("Time in: " + TimeIn);
 
-            Console.Write("Enter Time Out (HH:mm:ss): ");
+            Console.Write("Enter Time Out (HH:MM:SS): ");
             exitTimeInput = Console.ReadLine();
             if (DateTime.TryParseExact(exitTimeInput, "HH:mm:ss", null, System.Globalization.DateTimeStyles.None, out timeOut))
             {
                 TimeSpan duration = timeOut - TimeIn;
                 totalHours = duration.TotalHours;
                 parkingCost = ((totalHours - 1) * GetHourlyRate(vehicleType)) + GetBaseRate(vehicleType);
+                if (totalHours < 1) {
+                    parkingCost = GetBaseRate(vehicleType);
+                }
 
                 Console.WriteLine("Duration of parking: " + duration);
                 Console.WriteLine("Parking Cost: " + parkingCost);
             }
             else
             {
-                Console.WriteLine("Invalid time format. Please enter time in HH:mm:ss format.");
+                Console.WriteLine("Invalid time format. Please enter time in HH:MM:SS format.");
             }
         }
 
