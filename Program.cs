@@ -1,4 +1,5 @@
 
+
 using System;
 
 namespace ParkingSystem
@@ -26,7 +27,6 @@ namespace ParkingSystem
             do
             {
                 isvalidOption = false;
-                Console.WriteLine("OVERNIGHT PARKING IS NOT ALLOWED \n");
                 Console.WriteLine("Please select your vehicle type below:");
                 Console.WriteLine("1. Motor Bike");
                 Console.WriteLine("2. SUV");
@@ -82,26 +82,31 @@ namespace ParkingSystem
             do
             {
                 isValid = false;
-                Console.Write("Enter Time Out (HH:mm:ss): ");
+                Console.Write("Enter Time Out (yyyy-MM-dd HH:mm:ss): ");
                 exitTimeInput = Console.ReadLine();
-                if (DateTime.TryParseExact(exitTimeInput, "HH:mm:ss", null, System.Globalization.DateTimeStyles.None, out timeOut))
+                if (DateTime.TryParseExact(exitTimeInput, "yyyy-MM-dd HH:mm:ss", null, System.Globalization.DateTimeStyles.None, out timeOut))
                 {
                     TimeSpan duration = timeOut - TimeIn;
                     totalHours = duration.TotalHours;
                     parkingCost = ((totalHours - 1) * GetHourlyRate(vehicleType)) + GetBaseRate(vehicleType);
 
-                    if (totalHours < 1)
+                    if (totalHours <= 1)
                     {
                         parkingCost = GetBaseRate(vehicleType);
                     }
+                    else
+                    {
+                        parkingCost = GetBaseRate(vehicleType) + ((totalHours - 1) * GetHourlyRate(vehicleType));
+                    }
 
-                    Console.WriteLine("Duration of parking: " + duration);
-                    Console.WriteLine("Parking Cost: " + parkingCost);
+
+                    Console.WriteLine("Duration of parking: " + duration.ToString(@"d\.hh\:mm\:ss"));
+                    Console.WriteLine("Parking Cost: " + (int)parkingCost);
                     isValid = true;
                 }
                 else
                 {
-                    Console.WriteLine("Invalid time format. Please enter time in HH:mm:ss format.");
+                    Console.WriteLine("Invalid time format. Please enter time in yyyy-MM-dd HH:mm:ss format.");
                 }
             }
             while (!isValid);
